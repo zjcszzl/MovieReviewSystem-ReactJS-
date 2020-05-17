@@ -2,18 +2,16 @@ import React from "react";
 import { StyleSheet, Text, View } from "react-native";
 
 export default function App() {
-  // Debug
-  // console.log("App executed");
-
   return (
     <View style={styles.container}>
-      <Text>Hello World</Text>
+      <Text numberOfLines={1}>Hello React Native</Text>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
+    // flex: 1 -> means auto fit to screen
     flex: 1,
     backgroundColor: "#fff",
     alignItems: "center",
