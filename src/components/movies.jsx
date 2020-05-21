@@ -84,7 +84,7 @@ class Movies extends React.Component {
           />
         </div>
         <div className="col">
-          <p>Shwoing {filteredMovies.length} movies in the database</p>
+          <p>Showing {filteredMovies.length} movies in the database</p>
           <MoviesTable
             movies={movies}
             sortColumn={this.state.sortColumn}
