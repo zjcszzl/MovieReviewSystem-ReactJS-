@@ -7,11 +7,11 @@ import "bootstrap/dist/css/bootstrap.css";
 import "font-awesome/css/font-awesome.css";
 import Movies from "./components/movies";
 import { BrowserRouter } from "react-router-dom";
-import SelfRouter from "./components/Router/selfRouter";
-
+import SelfRouter from "./components/TestRouter/selfRouter";
+import MovieApp from "./MovieApp";
 ReactDOM.render(
   <BrowserRouter>
-    <Movies />
+    <MovieApp />
   </BrowserRouter>,
   document.getElementById("root")
 );
