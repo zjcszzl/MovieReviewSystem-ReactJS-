@@ -6,8 +6,15 @@ import * as serviceWorker from "./serviceWorker";
 import "bootstrap/dist/css/bootstrap.css";
 import "font-awesome/css/font-awesome.css";
 import Movies from "./components/movies";
+import { BrowserRouter } from "react-router-dom";
+import SelfRouter from "./components/Router/selfRouter";
 
-ReactDOM.render(<Movies />, document.getElementById("root"));
+ReactDOM.render(
+  <BrowserRouter>
+    <Movies />
+  </BrowserRouter>,
+  document.getElementById("root")
+);
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.

@@ -6,6 +6,8 @@ import { paginate } from "../utils/paginate";
 import ListGroup from "../components/listGroup";
 import MoviesTable from "./moviesTable";
 import _ from "lodash";
+import NavBar from "./navbar";
+import { Route } from "react-router-dom";
 
 class Movies extends React.Component {
   state = {
