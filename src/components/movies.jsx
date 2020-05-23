@@ -8,6 +8,8 @@ import MoviesTable from "./moviesTable";
 import _ from "lodash";
 import NavBar from "./navbar";
 import { Route } from "react-router-dom";
+import { Link } from "react-router-dom";
+import SearchBox from "../components/searchBox";
 
 class Movies extends React.Component {
   state = {
@@ -16,13 +18,26 @@ class Movies extends React.Component {
     currentPage: 1,
     genres: [],
     selectedGenre: "",
-    sortColumn: { path: "title", order: "asc" },
+    sortColumn: {
+      path: "title",
+      order: "asc",
+    },
+    searchQuery: "",
   };
 
   componentDidMount() {
-    const genres = [{ name: "All Genres", _id: "" }, ...getGenres()];
+    const genres = [
+      {
+        name: "All Genres",
+        _id: "",
+      },
+      ...getGenres(),
+    ];
 
-    this.setState({ movies: getMovies(), genres: genres });
+    this.setState({
+      movies: getMovies(),
+      genres: genres,
+    });
   }
 
   handDelete = (movie) => {
@@ -37,31 +52,49 @@ class Movies extends React.Component {
     const new_movies = [...this.state.movies];
     const index = new_movies.indexOf(movie);
     new_movies[index].liked = !new_movies[index].liked;
-    this.setState({ movies: new_movies });
+    this.setState({
+      movies: new_movies,
+    });
   };
 
   handlePageChange = (page) => {
-    this.setState({ currentPage: page });
+    this.setState({
+      currentPage: page,
+    });
   };
 
   handleGenreSelect = (genre) => {
-    this.setState({ selectedGenre: genre, currentPage: 1 });
+    this.setState({
+      selectedGenre: genre,
+      currentPage: 1,
+      searchQuery: "",
+    });
   };
 
   handleSort = (sortColumn) => {
-    this.setState({ sortColumn });
+    this.setState({
+      sortColumn,
+    });
+  };
+
+  handleSearch = (query) => {
+    this.setState({ searchQuery: query, selectedGenre: null, currentPage: 1 });
   };
 
   render() {
     const { length: count } = this.state.movies;
+    const { searchQuery } = this.state;
     if (count === 0) return <p> There are no movies in the database. </p>;
 
-    const filteredMovies =
-      this.state.selectedGenre && this.state.selectedGenre._id
-        ? this.state.movies.filter(
-            (m) => m.genre._id === this.state.selectedGenre._id
-          )
-        : this.state.movies;
+    let filteredMovies = this.state.movies;
+    if (searchQuery)
+      filteredMovies = this.state.movies.filter((m) =>
+        m.title.toLowerCase().startsWith(searchQuery.toLowerCase())
+      );
+    else if (this.state.selectedGenre && this.state.selectedGenre._id)
+      filteredMovies = this.state.movies.filter(
+        (m) => m.genre._id === this.state.selectedGenre._id
+      );
 
     const sortedMovies = _.orderBy(
       filteredMovies,
@@ -83,24 +116,38 @@ class Movies extends React.Component {
             items={this.state.genres}
             selectedItem={this.state.selectedGenre}
             onItemSelect={this.handleGenreSelect}
-          />
-        </div>
+          />{" "}
+        </div>{" "}
         <div className="col">
-          <p>Showing {filteredMovies.length} movies in the database</p>
+          <Link
+            to="/movies/new"
+            className="btn btn-primary"
+            style={{
+              marginBottom: 20,
+            }}
+          >
+            {" "}
+            New Movie{" "}
+          </Link>{" "}
+          <p> Showing {filteredMovies.length} movies in the database </p>{" "}
+          <SearchBox
+            value={this.state.searchQuery}
+            onChange={this.handleSearch}
+          />
           <MoviesTable
             movies={movies}
             sortColumn={this.state.sortColumn}
             onLike={this.handleLike}
             onDelete={this.handDelete}
             onSort={this.handleSort}
-          />
+          />{" "}
           <Pagination
             itemsCount={filteredMovies.length}
             pageSize={this.state.pageSize}
             onPageChange={this.handlePageChange}
             currentPage={this.state.currentPage}
-          />
-        </div>
+          />{" "}
+        </div>{" "}
       </div>
     );
   }
